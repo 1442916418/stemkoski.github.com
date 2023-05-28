@@ -4,6 +4,7 @@
   "description": "threejs",
   "main": "Three.js",
   "scripts": {
+    "serve:three": "serve Three.js",
     "prettier": "prettier --write ./Three.js/**/*.{js,html,css}"
   },
   "repository": {
