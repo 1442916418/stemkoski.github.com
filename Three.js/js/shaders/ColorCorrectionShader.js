@@ -5,44 +5,36 @@
  */
 
 THREE.ColorCorrectionShader = {
+  uniforms: {
+    tDiffuse: { type: 't', value: null },
+    powRGB: { type: 'v3', value: new THREE.Vector3(2, 2, 2) },
+    mulRGB: { type: 'v3', value: new THREE.Vector3(1, 1, 1) }
+  },
 
-	uniforms: {
+  vertexShader: [
+    'varying vec2 vUv;',
 
-		"tDiffuse": { type: "t", value: null },
-		"powRGB":   { type: "v3", value: new THREE.Vector3( 2, 2, 2 ) },
-		"mulRGB":   { type: "v3", value: new THREE.Vector3( 1, 1, 1 ) }
+    'void main() {',
 
-	},
+    'vUv = uv;',
 
-	vertexShader: [
+    'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
 
-		"varying vec2 vUv;",
+    '}'
+  ].join('\n'),
 
-		"void main() {",
+  fragmentShader: [
+    'uniform sampler2D tDiffuse;',
+    'uniform vec3 powRGB;',
+    'uniform vec3 mulRGB;',
 
-			"vUv = uv;",
+    'varying vec2 vUv;',
 
-			"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+    'void main() {',
 
-		"}"
+    'gl_FragColor = texture2D( tDiffuse, vUv );',
+    'gl_FragColor.rgb = mulRGB * pow( gl_FragColor.rgb, powRGB );',
 
-	].join("\n"),
-
-	fragmentShader: [
-
-		"uniform sampler2D tDiffuse;",
-		"uniform vec3 powRGB;",
-		"uniform vec3 mulRGB;",
-
-		"varying vec2 vUv;",
-
-		"void main() {",
-
-			"gl_FragColor = texture2D( tDiffuse, vUv );",
-			"gl_FragColor.rgb = mulRGB * pow( gl_FragColor.rgb, powRGB );",
-
-		"}"
-
-	].join("\n")
-
-};
+    '}'
+  ].join('\n')
+}

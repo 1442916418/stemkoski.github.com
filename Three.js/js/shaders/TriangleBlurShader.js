@@ -11,68 +11,60 @@
  */
 
 THREE.TriangleBlurShader = {
+  uniforms: {
+    texture: { type: 't', value: null },
+    delta: { type: 'v2', value: new THREE.Vector2(1, 1) }
+  },
 
-	uniforms : {
+  vertexShader: [
+    'varying vec2 vUv;',
 
-		"texture": { type: "t", value: null },
-		"delta":   { type: "v2", value:new THREE.Vector2( 1, 1 )  }
+    'void main() {',
 
-	},
+    'vUv = uv;',
+    'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
 
-	vertexShader: [
+    '}'
+  ].join('\n'),
 
-		"varying vec2 vUv;",
+  fragmentShader: [
+    '#define ITERATIONS 10.0',
 
-		"void main() {",
+    'uniform sampler2D texture;',
+    'uniform vec2 delta;',
 
-			"vUv = uv;",
-			"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+    'varying vec2 vUv;',
 
-		"}"
+    'float random( vec3 scale, float seed ) {',
 
-	].join("\n"),
+    // use the fragment position for a different seed per-pixel
 
-	fragmentShader: [
+    'return fract( sin( dot( gl_FragCoord.xyz + seed, scale ) ) * 43758.5453 + seed );',
 
-		"#define ITERATIONS 10.0",
+    '}',
 
-		"uniform sampler2D texture;",
-		"uniform vec2 delta;",
+    'void main() {',
 
-		"varying vec2 vUv;",
+    'vec4 color = vec4( 0.0 );',
 
-		"float random( vec3 scale, float seed ) {",
+    'float total = 0.0;',
 
-			// use the fragment position for a different seed per-pixel
+    // randomize the lookup values to hide the fixed number of samples
 
-			"return fract( sin( dot( gl_FragCoord.xyz + seed, scale ) ) * 43758.5453 + seed );",
+    'float offset = random( vec3( 12.9898, 78.233, 151.7182 ), 0.0 );',
 
-		"}",
+    'for ( float t = -ITERATIONS; t <= ITERATIONS; t ++ ) {',
 
-		"void main() {",
+    'float percent = ( t + offset - 0.5 ) / ITERATIONS;',
+    'float weight = 1.0 - abs( percent );',
 
-			"vec4 color = vec4( 0.0 );",
+    'color += texture2D( texture, vUv + delta * percent ) * weight;',
+    'total += weight;',
 
-			"float total = 0.0;",
+    '}',
 
-			// randomize the lookup values to hide the fixed number of samples
+    'gl_FragColor = color / total;',
 
-			"float offset = random( vec3( 12.9898, 78.233, 151.7182 ), 0.0 );",
-
-			"for ( float t = -ITERATIONS; t <= ITERATIONS; t ++ ) {",
-
-				"float percent = ( t + offset - 0.5 ) / ITERATIONS;",
-				"float weight = 1.0 - abs( percent );",
-
-				"color += texture2D( texture, vUv + delta * percent ) * weight;",
-				"total += weight;",
-
-			"}",
-
-			"gl_FragColor = color / total;",
-
-		"}"
-
-	].join("\n")
-
-};
+    '}'
+  ].join('\n')
+}

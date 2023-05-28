@@ -5,40 +5,33 @@
  */
 
 THREE.AdditiveBlendShader = {
+  uniforms: {
+    tDiffuse1: { type: 't', value: null },
+    tDiffuse2: { type: 't', value: null }
+  },
 
-	uniforms: {
-	
-		"tDiffuse1": { type: "t", value: null },
-		"tDiffuse2": { type: "t", value: null }
-	},
+  vertexShader: [
+    'varying vec2 vUv;',
 
-	vertexShader: [
+    'void main() {',
 
-		"varying vec2 vUv;",
+    'vUv = uv;',
+    'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
 
-		"void main() {",
+    '}'
+  ].join('\n'),
 
-			"vUv = uv;",
-			"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+  fragmentShader: [
+    'uniform sampler2D tDiffuse1;',
+    'uniform sampler2D tDiffuse2;',
 
-		"}"
+    'varying vec2 vUv;',
 
-	].join("\n"),
+    'void main() {',
 
-	fragmentShader: [
-
-		"uniform sampler2D tDiffuse1;",
-		"uniform sampler2D tDiffuse2;",
-
-		"varying vec2 vUv;",
-
-		"void main() {",
-
-			"vec4 texel1 = texture2D( tDiffuse1, vUv );",
-			"vec4 texel2 = texture2D( tDiffuse2, vUv );",
-			"gl_FragColor = texel1 + texel2;",
-		"}"
-
-	].join("\n")
-
-};
+    'vec4 texel1 = texture2D( tDiffuse1, vUv );',
+    'vec4 texel2 = texture2D( tDiffuse2, vUv );',
+    'gl_FragColor = texel1 + texel2;',
+    '}'
+  ].join('\n')
+}

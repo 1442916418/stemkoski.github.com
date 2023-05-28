@@ -6,52 +6,44 @@
  */
 
 THREE.UnpackDepthRGBAShader = {
+  uniforms: {
+    tDiffuse: { type: 't', value: null },
+    opacity: { type: 'f', value: 1.0 }
+  },
 
-	uniforms: {
+  vertexShader: [
+    'varying vec2 vUv;',
 
-		"tDiffuse": { type: "t", value: null },
-		"opacity":  { type: "f", value: 1.0 }
+    'void main() {',
 
-	},
+    'vUv = uv;',
+    'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
 
-	vertexShader: [
+    '}'
+  ].join('\n'),
 
-		"varying vec2 vUv;",
+  fragmentShader: [
+    'uniform float opacity;',
 
-		"void main() {",
+    'uniform sampler2D tDiffuse;',
 
-			"vUv = uv;",
-			"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+    'varying vec2 vUv;',
 
-		"}"
+    // RGBA depth
 
-	].join("\n"),
+    'float unpackDepth( const in vec4 rgba_depth ) {',
 
-	fragmentShader: [
+    'const vec4 bit_shift = vec4( 1.0 / ( 256.0 * 256.0 * 256.0 ), 1.0 / ( 256.0 * 256.0 ), 1.0 / 256.0, 1.0 );',
+    'float depth = dot( rgba_depth, bit_shift );',
+    'return depth;',
 
-		"uniform float opacity;",
+    '}',
 
-		"uniform sampler2D tDiffuse;",
+    'void main() {',
 
-		"varying vec2 vUv;",
+    'float depth = 1.0 - unpackDepth( texture2D( tDiffuse, vUv ) );',
+    'gl_FragColor = opacity * vec4( vec3( depth ), 1.0 );',
 
-		// RGBA depth
-
-		"float unpackDepth( const in vec4 rgba_depth ) {",
-
-			"const vec4 bit_shift = vec4( 1.0 / ( 256.0 * 256.0 * 256.0 ), 1.0 / ( 256.0 * 256.0 ), 1.0 / 256.0, 1.0 );",
-			"float depth = dot( rgba_depth, bit_shift );",
-			"return depth;",
-
-		"}",
-
-		"void main() {",
-
-			"float depth = 1.0 - unpackDepth( texture2D( tDiffuse, vUv ) );",
-			"gl_FragColor = opacity * vec4( vec3( depth ), 1.0 );",
-
-		"}"
-
-	].join("\n")
-
-};
+    '}'
+  ].join('\n')
+}

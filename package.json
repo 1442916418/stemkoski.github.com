@@ -1,0 +1,23 @@
+{
+  "name": "stemkoski.github.com",
+  "version": "1.0.0",
+  "description": "threejs",
+  "main": "Three.js",
+  "scripts": {
+    "prettier": "prettier --write ./Three.js/**/*.{js,html,css}"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1442916418/stemkoski.github.com.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/1442916418/stemkoski.github.com/issues"
+  },
+  "homepage": "https://github.com/1442916418/stemkoski.github.com#readme",
+  "devDependencies": {
+    "prettier": "^2.8.8"
+  }
+}
