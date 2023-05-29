@@ -7,5 +7,5 @@
 - 全局安装 [serve](https://github.com/vercel/serve#readme)
 
 ```bash
-serve
+npm run serve:three
 ```
