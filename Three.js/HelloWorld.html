@@ -31,12 +31,13 @@
   <!-- ------------------------------------------------------------ -->
 
   <div id="ThreeJS" style="z-index: 1; position: absolute; left: 0px; top: 0px"></div>
+  <div id="message"></div>
   <script>
-    /*
-Three.js "tutorials by example"
-Author: Lee Stemkoski
-Date: July 2013 (three.js v59dev)
-*/
+    /**
+    * Three.js "tutorials by example"
+    * Author: Lee Stemkoski
+    * Date: July 2013 (three.js v59dev)
+    */
 
     //////////
     // MAIN //
@@ -144,7 +145,7 @@ Date: July 2013 (three.js v59dev)
       var light = new THREE.PointLight(0xffffff)
       light.position.set(0, 250, 0)
       scene.add(light)
-      var ambientLight = new THREE.AmbientLight(0x111111)
+      // var ambientLight = new THREE.AmbientLight(0x111111)
       // scene.add(ambientLight);
 
       //////////////
@@ -161,18 +162,18 @@ Date: July 2013 (three.js v59dev)
       //   (don't forget to add (at least one) light!)
       var sphereMaterial = new THREE.MeshLambertMaterial({ color: 0x8888ff })
       var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
-      sphere.position.set(100, 50, -50)
+      sphere.position.set(50, 50, 100)
       scene.add(sphere)
 
       // Create an array of materials to be used in a cube, one for each side
       var cubeMaterialArray = []
       // order to add materials: x+,x-,y+,y-,z+,z-
-      cubeMaterialArray.push(new THREE.MeshBasicMaterial({ color: 0xff3333 }))
-      cubeMaterialArray.push(new THREE.MeshBasicMaterial({ color: 0xff8800 }))
-      cubeMaterialArray.push(new THREE.MeshBasicMaterial({ color: 0xffff33 }))
-      cubeMaterialArray.push(new THREE.MeshBasicMaterial({ color: 0x33ff33 }))
-      cubeMaterialArray.push(new THREE.MeshBasicMaterial({ color: 0x3333ff }))
-      cubeMaterialArray.push(new THREE.MeshBasicMaterial({ color: 0x8833ff }))
+      cubeMaterialArray.push(new THREE.MeshBasicMaterial({ color: 0xff3333 })) // 红色
+      cubeMaterialArray.push(new THREE.MeshBasicMaterial({ color: 0xff8800 })) // 橙色
+      cubeMaterialArray.push(new THREE.MeshBasicMaterial({ color: 0xffff33 })) // 黄色
+      cubeMaterialArray.push(new THREE.MeshBasicMaterial({ color: 0x33ff33 })) // 绿色
+      cubeMaterialArray.push(new THREE.MeshBasicMaterial({ color: 0x3333ff })) // 蓝色
+      cubeMaterialArray.push(new THREE.MeshBasicMaterial({ color: 0x8833ff })) // 紫色
       var cubeMaterials = new THREE.MeshFaceMaterial(cubeMaterialArray)
       // Cube parameters: width (x), height (y), depth (z),
       //        (optional) segments along x, segments along y, segments along z
@@ -180,12 +181,12 @@ Date: July 2013 (three.js v59dev)
       // using THREE.MeshFaceMaterial() in the constructor below
       //   causes the mesh to use the materials stored in the geometry
       cube = new THREE.Mesh(cubeGeometry, cubeMaterials)
-      cube.position.set(-100, 50, -50)
+      cube.position.set(-100, 10, -50)
       scene.add(cube)
 
       // create a set of coordinate axes to help orient user
       //    specify length in pixels in each direction
-      var axes = new THREE.AxisHelper(100)
+      var axes = new THREE.AxisHelper(1000)
       scene.add(axes)
 
       ///////////
@@ -214,12 +215,12 @@ Date: July 2013 (three.js v59dev)
       // make sure the camera's "far" value is large enough so that it will render the skyBox!
       var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000)
       // BackSide: render faces from inside of the cube, instead of from outside (default).
-      var skyBoxMaterial = new THREE.MeshBasicMaterial({ color: 0x9999ff, side: THREE.BackSide })
+      var skyBoxMaterial = new THREE.MeshBasicMaterial({ color: 0xd4f8ff, side: THREE.BackSide })
       var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial)
       // scene.add(skyBox);
 
       // fog must be added to scene before first render
-      scene.fog = new THREE.FogExp2(0x9999ff, 0.00025)
+      // scene.fog = new THREE.FogExp2(0xff00ff, 0.00025)
     }
 
     function animate() {
